@@ -18,6 +18,8 @@ async function run() {
     try {
 
         const subjectCollection = client.db('serviceReview').collection('subjects')
+        const reviewCollection = client.db('serviceReview').collection('review')
+        const usersCollection = client.db('serviceReview').collection('users')
 
         app.get('/3subjects', async (req, res) => {
             const query = {}
@@ -38,6 +40,24 @@ async function run() {
             const course = await subjectCollection.findOne(query);
             res.send(course);
         });
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            console.log(user);
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
+        });
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.send(result);
+        });
+
+        app.get('/users', async (req, res) => {
+            const query = {};
+            const users = await usersCollection.find(query).toArray();
+            res.send(users)
+        })
     }
 
     finally {
@@ -47,8 +67,7 @@ async function run() {
 
 run().catch(err => console.error(err))
 
-// DB_USER=serviceReview
-// DB_PASS=w9rtxffpUZNWmF2N
+
 
 
 app.get('/', (req, res) => {
