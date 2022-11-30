@@ -51,7 +51,41 @@ async function run() {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
             res.send(result);
+
         });
+
+        app.delete('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await reviewCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+        // app.get('/reviews', async (req, res) => {
+        //     const query = {};
+        //     const review = await reviewCollection.find(query).toArray();
+        //     res.send(review)
+        // })
+
+        app.get('/reviews', async (req, res) => {
+            // const email = req.params.email;
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
+                }
+            }
+
+            // const email = req.decoded.email;
+
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' });
+            // }
+
+            // const query = { email: user.emeil };
+            const reviews = await reviewCollection.find(query).toArray();
+            res.send(reviews);
+        })
 
         app.get('/users', async (req, res) => {
             const query = {};
