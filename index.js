@@ -75,16 +75,19 @@ async function run() {
                     email: req.query.email
                 }
             }
-
-            // const email = req.decoded.email;
-
-            // if (email !== decodedEmail) {
-            //     return res.status(403).send({ message: 'forbidden access' });
-            // }
-
-            // const query = { email: user.emeil };
             const reviews = await reviewCollection.find(query).toArray();
             res.send(reviews);
+        })
+        app.get('/reviewsss', async (req, res) => {
+            // const email = req.params.email;
+            let query = {};
+            if (req.query.title) {
+                query = {
+                    title: req.query.title
+                }
+            }
+            const reviewss = await reviewCollection.find(query).toArray();
+            res.send(reviewss);
         })
 
         app.get('/users', async (req, res) => {
